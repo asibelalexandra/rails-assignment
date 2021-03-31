@@ -1,0 +1,49 @@
+<% provide(:title, 'Employee Profile') %>
+<h1>Employee profile - <%= @employee.full_name %></h1>
+
+<div class="row">
+  <div class="col-sm-3">
+    <div class="panel panel-default">
+      <div class="panel-heading"><%= @employee.full_name %></div>
+      <div class="panel-body">
+        <div class="title">Employer: <%= @employee.employer.employer_name %></div>
+      </div>
+      <div class="panel-footer">
+        <div class="btn-group">
+          <%= link_to "Add Timesheet", new_employee_timesheet_path(@employee.id), method: :get, class: "btn btn-primary" %>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="col-sm-9">
+    <table class="table">
+      <thead class="thead-dark">
+      <tr>
+        <th scope="col">#</th>
+        <th scope="col">Timesheet Hours</th>
+        <th scope="col">Timesheet Date of Service</th>
+        <th scope="col">Timesheet Budget</th>
+      </tr>
+      </thead>
+      <tbody>
+      <% @timesheets.each do |timesheet| %>
+        <tr>
+          <td><%= timesheet.id %></td>
+          <td><%= timesheet.hours %></td>
+          <td><%= timesheet.date_of_service %></td>
+          <td><%= timesheet.budget.id %></td>
+          <td> <%= link_to "Show Timesheet", timesheet_path(timesheet.id), method: :get, class: "btn btn-primary" %></td>
+          <% if timesheet.approved == false %>
+            <td> <%= button_tag "Needs Approval", class: "btn btn-primary" %></td>
+          <% else %>
+            <td> <%= button_tag "Approved", class: "btn btn-success" %></td>
+          <% end %>
+        </tr>
+      <% end %>
+      </tbody>
+    </table>
+    <% if @timesheets.blank? %>
+      <p>There are no timesheets currently.</p>
+    <% end %>
+  </div>
+</div>

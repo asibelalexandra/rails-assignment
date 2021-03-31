@@ -1,0 +1,72 @@
+<% provide(:title, 'Employer Profile') %>
+<h1>Employer profile - <%= @employer.employer_name %></h1>
+
+<div class="row">
+  <div class="col-sm-3">
+    <div class="panel panel-default">
+      <div class="panel-heading"><%= @employer.employer_name %></div>
+      <div class="panel-footer">
+        <div class="btn-group">
+          <%= link_to "Add Budget", new_employer_budget_path(@employer.id), method: :get, class: "btn btn-primary"%>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="col-sm-9">
+    <div class="row">
+      <h1>Budgets</h1>
+      <table class="table">
+        <thead class="thead-dark">
+        <tr>
+          <th scope="col">#</th>
+          <th scope="col">Budget Name</th>
+          <th scope="col">Budget Hours</th>
+          <th scope="col">Budget Start Date</th>
+          <th scope="col">Budget End Date</th>
+        </tr>
+        </thead>
+        <tbody>
+        <% @budgets.each do |budget| %>
+          <tr>
+            <td><%= budget.id %></td>
+            <td><%= budget.budget_name %></td>
+            <td><%= budget.hours %></td>
+            <td><%= budget.start_date %></td>
+            <td><%= budget.end_date %></td>
+            <td><%= link_to "Show Bugdet", budget_path(budget.id), method: :get, class: "btn btn-primary" %></td>
+          </tr>
+        <% end %>
+        </tbody>
+      </table>
+      <% if @budgets.blank? %>
+        <p>There are no budgets currently.</p>
+      <% end %>
+    </div>
+    <div class="row">
+      <h1>Employees</h1>
+      <table class="table">
+        <thead class="thead-dark">
+        <tr>
+          <th scope="col">#</th>
+          <th scope="col">Name</th>
+          <th scope="col">Employer</th>
+        </tr>
+        </thead>
+        <tbody>
+        <% @employees.each do |employee| %>
+          <tr>
+            <td><%= employee.id %></td>
+            <td><%= employee.full_name %></td>
+            <td><%= employee.employer.employer_name %></td>
+            <td><%= link_to "Show Employee", employee_path(employee.id), method: :get, class: "btn btn-primary" %></td>
+          </tr>
+        <% end %>
+        </tbody>
+      </table>
+      <% if @employees.blank? %>
+        <p>There are no employees currently.</p>
+      <% end %>
+    </div>
+  </div>
+
+</div>

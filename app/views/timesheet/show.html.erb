@@ -1,0 +1,23 @@
+<% provide(:title, 'Timesheet Profile') %>
+<h1>Timesheet profile - <%= @timesheet.id %></h1>
+
+<div class="row">
+  <div class="col-sm-3">
+    <div class="panel panel-default">
+      <div class="panel-heading">Timesheet: <%= @timesheet.id %></div>
+      <div class="panel-body">
+        <div class="desc">Hours: <%= @timesheet.hours %></div>
+        <div class="desc">Date of Service: <%= @timesheet.date_of_service %></div>
+        <div class="desc">Budget Id: <%= @timesheet.budget_id %></div>
+        <div class="desc">Employee: <%= @timesheet.employee.full_name %></div>
+        <% if @timesheet.approved == false %>
+          <%= button_tag "Needs Approval", class: "btn btn-primary"%>
+        <% else %>
+          <%= button_tag "Approved", class: "btn btn-success"%>
+        <% end %>
+      </div>
+    </div>
+  </div>
+  <div class="col-sm-9">
+  </div>
+</div>

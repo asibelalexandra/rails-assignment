@@ -1,0 +1,35 @@
+<% provide(:title, 'Add Timesheet') %>
+<h1>Add new timesheet</h1>
+
+<div class="row">
+  <div class="col-md-6 col-md-offset-3">
+    <%= form_with model: @timesheet, url: timesheet_index_path, method: :post, local: true do |f| %>
+      <% if @timesheet && @timesheet&.errors.any? %>
+        <div id="error_explanation">
+          <div class="alert alert-danger">
+            The form contains <%= pluralize(@timesheet.errors.count, "error") %>.
+          </div>
+          <ul>
+            <% @timesheet.errors.full_messages.each do |msg| %>
+              <li><%= msg %></li>
+            <% end %>
+          </ul>
+        </div>
+      <% end %>
+
+      <%= f.label :employee_id, "Employee" %>
+      <% if params[:employee_id].blank? %>
+        <%= f.select :employee_id, options_from_collection_for_select(Employee.all, :id, :full_name) %>
+      <% else %>
+        <%= f.select :employee_id, options_from_collection_for_select(Employee.all, :id, :full_name, params[:employee_id]) %>
+      <% end %>
+      <%= f.label :budget_id, "Budget" %>
+      <%= f.select :budget_id, options_from_collection_for_select(Budget.all, :id, :budget_name) %>
+      <%= f.label :hours, "Hours"%>
+      <%= f.number_field :hours, input_html: { min: '0', step: 'any' }%>
+      <%= f.label :date_of_service, "Date of Service" %>
+      <%= f.date_field :date_of_service %>
+      <%= f.submit "Add timesheet", class: "btn btn-primary" %>
+    <% end %>
+  </div>
+</div>
