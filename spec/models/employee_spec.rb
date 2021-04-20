@@ -21,8 +21,18 @@ RSpec.describe Employee, type: :model do
       expect(subject).to_not be_valid
     end
 
+    it "should not save employee with first name longer than 50 chars" do
+      subject.first_name = rand(36**101).to_s(36)
+      expect(subject).to_not be_valid
+    end
+
     it "should not save employee with empty last name" do
       subject.last_name = nil
+      expect(subject).to_not be_valid
+    end
+
+    it "should not save employee with last name longer than 50 chars" do
+      subject.last_name = rand(36**101).to_s(36)
       expect(subject).to_not be_valid
     end
 
@@ -31,7 +41,6 @@ RSpec.describe Employee, type: :model do
       expect(subject).to_not be_valid
     end
 
-    #TODO employee first_name/last_name length tests
   end
 end
 

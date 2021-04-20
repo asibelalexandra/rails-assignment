@@ -33,7 +33,7 @@ RSpec.describe TimesheetController, type: :controller do
     end
   end
 
-  context "GET #new" do
+  context "POST #create" do
     it "should return a success response" do
       post :create, params: subject
       timesheet = Timesheet.last
@@ -54,7 +54,7 @@ RSpec.describe TimesheetController, type: :controller do
     end
   end
 
-  context "GET #show" do
+  context "GET #edit" do
     it "should return a success response" do
       post :create, params: subject
       timesheet = Timesheet.last
@@ -84,4 +84,51 @@ RSpec.describe TimesheetController, type: :controller do
     expect(response).to redirect_to root_path
     expect(flash[:success]).to eq format('Successfully deleted timesheet with id %s.', timesheet[:id])
   end
+
+  it "verifies if new timesheet is by default not approved " do
+    post :create, params: subject
+    timesheet = Timesheet.last
+
+    expect(timesheet.approved).to eq false
+  end    
+ 
+  it "verifies if existing timesheet can be approved" do
+    post :create, params: subject
+    timesheet = Timesheet.last
+
+    post :approve, params: { timesheet_id: timesheet[:id] }
+    expect(response).to redirect_to root_path
+    expect(flash[:success]).to eq format('Successfully approved timesheet with id %s.', timesheet[:id])
+    
+    timesheet = Timesheet.last
+    expect(timesheet.approved).to eq true
+  end    
+
+  it "verifies if existing and approved timesheet can be unapproved" do
+    post :create, params: subject
+    timesheet = Timesheet.last
+
+    post :approve, params: { timesheet_id: timesheet[:id] }
+    post :unapprove, params: { timesheet_id: timesheet[:id] }
+
+    expect(response).to redirect_to root_path
+    expect(flash[:success]).to eq format('Successfully unapproved timesheet with id %s.', timesheet[:id])
+    
+    timesheet = Timesheet.last
+    expect(timesheet.approved).to eq false
+  end    
+
+  it "verifies if existing and approved timesheet can be unapproved - take 2" do
+    post :create, params: subject
+    timesheet = Timesheet.last
+    Timesheet.update(timesheet[:id], approved: 1).save(:validate => false)
+
+    post :unapprove, params: { timesheet_id: timesheet[:id] }
+    expect(response).to redirect_to root_path
+    expect(flash[:success]).to eq format('Successfully unapproved timesheet with id %s.', timesheet[:id])
+    
+    timesheet = Timesheet.last
+    expect(timesheet.approved).to eq false
+  end    
+
 end

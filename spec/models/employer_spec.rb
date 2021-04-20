@@ -16,7 +16,7 @@ RSpec.describe Employer, type: :model do
   end
 
   it "should not save employer with name longer than 50 char" do
-    subject.employer_name = rand(36**51).to_s(36)
+    subject.employer_name = rand(36**101).to_s(36)
     expect(subject).to_not be_valid
   end
 end
